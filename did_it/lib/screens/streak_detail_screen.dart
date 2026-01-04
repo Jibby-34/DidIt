@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/streak.dart';
 import '../providers/streak_provider.dart';
 import '../theme/app_theme.dart';
+import '../widgets/decorative_background.dart';
 
 class StreakDetailScreen extends StatelessWidget {
   final Streak streak;
@@ -15,60 +16,112 @@ class StreakDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(streak.name),
-        actions: [
-          PopupMenuButton(
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'delete',
+    return DecorativeBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Custom Header
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
                 child: Row(
                   children: [
-                    Icon(Icons.delete_outline, color: Colors.red),
-                    SizedBox(width: 8),
-                    Text('Delete Streak'),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppTheme.electricBlue.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppTheme.electricBlue.withValues(alpha: 0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: AppTheme.electricBlue,
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        streak.name,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppTheme.electricBlue.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppTheme.electricBlue.withValues(alpha: 0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: PopupMenuButton(
+                        icon: Icon(
+                          Icons.more_vert,
+                          color: AppTheme.electricBlue,
+                        ),
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: 'delete',
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete_outline, color: Colors.red),
+                                SizedBox(width: 8),
+                                Text('Delete Streak'),
+                              ],
+                            ),
+                          ),
+                        ],
+                        onSelected: (value) async {
+                          if (value == 'delete') {
+                            final confirm = await showDialog<bool>(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Delete Streak?'),
+                                content: const Text(
+                                  'This action cannot be undone. Your progress will be lost.',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context, false),
+                                    child: const Text('Cancel'),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () => Navigator.pop(context, true),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                    ),
+                                    child: const Text('Delete'),
+                                  ),
+                                ],
+                              ),
+                            );
+
+                            if (confirm == true && context.mounted) {
+                              await context.read<StreakProvider>().deleteStreak(streak.id);
+                              if (context.mounted) {
+                                Navigator.pop(context);
+                              }
+                            }
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
-            onSelected: (value) async {
-              if (value == 'delete') {
-                final confirm = await showDialog<bool>(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Delete Streak?'),
-                    content: const Text(
-                      'This action cannot be undone. Your progress will be lost.',
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: const Text('Cancel'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                        ),
-                        child: const Text('Delete'),
-                      ),
-                    ],
-                  ),
-                );
-
-                if (confirm == true && context.mounted) {
-                  await context.read<StreakProvider>().deleteStreak(streak.id);
-                  if (context.mounted) {
-                    Navigator.pop(context);
-                  }
-                }
-              }
-            },
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
+              // Content
+              Expanded(
+                child: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -88,13 +141,22 @@ class StreakDetailScreen extends StatelessWidget {
                       vertical: 16,
                     ),
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
+                      gradient: LinearGradient(
                         colors: [
-                          AppTheme.electricYellow,
-                          AppTheme.neonGreen,
+                          AppTheme.electricBlue,
+                          AppTheme.electricBlueDark,
                         ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
                       borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.electricBlue.withValues(alpha: 0.5),
+                          blurRadius: 20,
+                          spreadRadius: 2,
+                        ),
+                      ],
                     ),
                     child: Column(
                       children: [
@@ -160,7 +222,7 @@ class StreakDetailScreen extends StatelessWidget {
                         children: [
                           const Icon(
                             Icons.lightbulb_outline,
-                            color: AppTheme.electricYellow,
+                            color: AppTheme.electricBlue,
                           ),
                           const SizedBox(width: 8),
                           Text(
@@ -193,7 +255,7 @@ class StreakDetailScreen extends StatelessWidget {
                         children: [
                           const Icon(
                             Icons.format_list_bulleted,
-                            color: AppTheme.neonGreen,
+                            color: AppTheme.electricBlue,
                           ),
                           const SizedBox(width: 8),
                           Text(
@@ -212,9 +274,16 @@ class StreakDetailScreen extends StatelessWidget {
                               Container(
                                 width: 24,
                                 height: 24,
-                                decoration: const BoxDecoration(
-                                  color: AppTheme.neonGreen,
+                                decoration: BoxDecoration(
+                                  color: AppTheme.electricBlue,
                                   shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppTheme.electricBlue.withValues(alpha: 0.5),
+                                      blurRadius: 8,
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
                                 ),
                                 child: Center(
                                   child: Text(
@@ -270,6 +339,11 @@ class StreakDetailScreen extends StatelessWidget {
             ),
           ],
         ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -285,14 +359,14 @@ class StreakDetailScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Icon(icon, color: AppTheme.electricYellow, size: 32),
+            Icon(icon, color: AppTheme.electricBlue, size: 32),
             const SizedBox(height: 8),
             Text(
               value,
               style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: AppTheme.electricYellow,
+                color: AppTheme.electricBlue,
               ),
             ),
             Text(

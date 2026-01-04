@@ -8,6 +8,7 @@ import '../services/ads_service.dart';
 import '../services/storage_service.dart';
 import '../constants/app_constants.dart';
 import '../theme/app_theme.dart';
+import '../widgets/decorative_background.dart';
 import 'premium_screen.dart';
 
 class CreateStreakScreen extends StatefulWidget {
@@ -61,9 +62,19 @@ class _CreateStreakScreenState extends State<CreateStreakScreen> {
       });
       
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('⚡ Unlocked! You can now create a streak.'),
-          backgroundColor: AppTheme.neonGreen,
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.flash_on, color: AppTheme.electricBlue, size: 20),
+              const SizedBox(width: 8),
+              const Text('Unlocked! You can now create a streak.'),
+            ],
+          ),
+          backgroundColor: AppTheme.electricBlue,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
       );
     }
@@ -117,18 +128,68 @@ class _CreateStreakScreenState extends State<CreateStreakScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Streak'),
-      ),
-      body: _isLoading
-          ? const Center(
+    return DecorativeBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Custom Header
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
+                child: Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppTheme.electricBlue.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppTheme.electricBlue.withValues(alpha: 0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: AppTheme.electricBlue,
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Row(
+                      children: [
+                        Icon(Icons.flash_on, color: AppTheme.electricBlue, size: 24),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Create Streak',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // Content
+              Expanded(
+                child: _isLoading
+          ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(color: AppTheme.electricYellow),
-                  SizedBox(height: 24),
-                  Text('⚡ Charging your streak...'),
+                  const CircularProgressIndicator(color: AppTheme.electricBlue),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.flash_on, color: AppTheme.electricBlue, size: 24),
+                      const SizedBox(width: 8),
+                      const Text('Charging your streak...'),
+                    ],
+                  ),
                 ],
               ),
             )
@@ -139,10 +200,22 @@ class _CreateStreakScreenState extends State<CreateStreakScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Text(
-                      '⚡',
-                      style: TextStyle(fontSize: 60),
-                      textAlign: TextAlign.center,
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: [
+                            AppTheme.electricBlue.withValues(alpha: 0.3),
+                            Colors.transparent,
+                          ],
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.flash_on,
+                        color: AppTheme.electricBlue,
+                        size: 60,
+                      ),
                     ),
                     const SizedBox(height: 24),
                     Text(
@@ -176,21 +249,35 @@ class _CreateStreakScreenState extends State<CreateStreakScreen> {
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: AppTheme.cardBackground,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: AppTheme.electricYellow,
+                            color: AppTheme.electricBlue,
                             width: 2,
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.electricBlue.withValues(alpha: 0.3),
+                              blurRadius: 12,
+                              spreadRadius: 0,
+                            ),
+                          ],
                         ),
                         child: Column(
                           children: [
-                            const Text(
-                              '⚡ Free Limit Reached',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: AppTheme.electricYellow,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.flash_on, color: AppTheme.electricBlue, size: 24),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Free Limit Reached',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.electricBlue,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 12),
                             Text(
@@ -241,31 +328,48 @@ class _CreateStreakScreenState extends State<CreateStreakScreen> {
                     if (!_isPremium) ...[
                       const SizedBox(height: 32),
                       Container(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
+                          gradient: LinearGradient(
                             colors: [
-                              AppTheme.electricYellow,
-                              AppTheme.neonGreen,
+                              AppTheme.electricBlue,
+                              AppTheme.electricBlueDark,
                             ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.electricBlue.withValues(alpha: 0.5),
+                              blurRadius: 20,
+                              spreadRadius: 2,
+                            ),
+                          ],
                         ),
                         child: Column(
                           children: [
-                            const Text(
-                              '⚡ Go Premium',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: AppTheme.darkBackground,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.flash_on, color: AppTheme.darkBackground, size: 24),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Go Premium',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.darkBackground,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 8),
                             const Text(
                               'Unlimited streaks, no ads, instant AI setup',
                               style: TextStyle(
                                 color: AppTheme.darkBackground,
+                                fontWeight: FontWeight.w600,
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -286,6 +390,11 @@ class _CreateStreakScreenState extends State<CreateStreakScreen> {
                 ),
               ),
             ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

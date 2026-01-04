@@ -58,14 +58,14 @@ class StreakCard extends StatelessWidget {
                       Text(
                         'Tap to complete today',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppTheme.electricYellow,
+                              color: AppTheme.electricBlue,
                             ),
                       )
                     else
                       Text(
                         '✓ Completed today',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppTheme.neonGreen,
+                              color: AppTheme.neonBlue,
                             ),
                       ),
                   ],
@@ -78,12 +78,26 @@ class StreakCard extends StatelessWidget {
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: AppTheme.electricYellow.withValues(alpha: 0.2),
+                  gradient: LinearGradient(
+                    colors: [
+                      AppTheme.electricBlue.withValues(alpha: 0.2),
+                      AppTheme.electricBlue.withValues(alpha: 0.1),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: AppTheme.electricYellow,
+                    color: AppTheme.electricBlue,
                     width: 2,
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppTheme.electricBlue.withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      spreadRadius: 0,
+                    ),
+                  ],
                 ),
                 child: Column(
                   children: [
@@ -92,13 +106,13 @@ class StreakCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.electricYellow,
+                        color: AppTheme.electricBlue,
                       ),
                     ),
                     Text(
                       'days',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppTheme.electricYellow,
+                            color: AppTheme.electricBlue,
                           ),
                     ),
                   ],

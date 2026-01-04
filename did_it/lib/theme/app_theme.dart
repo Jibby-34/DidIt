@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Lightning-themed colors
-  static const Color electricYellow = Color(0xFFFFF200);
-  static const Color neonGreen = Color(0xFF39FF14);
-  static const Color electricBlue = Color(0xFF0FF0FC);
-  static const Color darkBackground = Color(0xFF0A0E27);
-  static const Color cardBackground = Color(0xFF1A1F3A);
-  static const Color textPrimary = Color(0xFFFFFFFF);
-  static const Color textSecondary = Color(0xFFB0B8C8);
+  // Professional Navy Blue palette - Muted and sophisticated
+  static const Color electricBlue = Color(0xFF3B82F6);
+  static const Color electricBlueDark = Color(0xFF2563EB);
+  static const Color electricBlueLight = Color(0xFF60A5FA);
+  static const Color neonBlue = Color(0xFF3B82F6);
+  static const Color darkBackground = Color(0xFF0F172A);
+  static const Color darkBackgroundSecondary = Color(0xFF1E293B);
+  static const Color cardBackground = Color(0xFF1E293B);
+  static const Color cardBackgroundElevated = Color(0xFF334155);
+  static const Color textPrimary = Color(0xFFF8FAFC);
+  static const Color textSecondary = Color(0xFF94A3B8);
+  
+  // Legacy color names for compatibility
+  static const Color electricYellow = electricBlue;
+  static const Color neonGreen = neonBlue;
 
   static ThemeData get darkTheme {
     return ThemeData(
@@ -17,9 +24,9 @@ class AppTheme {
       scaffoldBackgroundColor: darkBackground,
       
       colorScheme: const ColorScheme.dark(
-        primary: electricYellow,
-        secondary: neonGreen,
-        tertiary: electricBlue,
+        primary: electricBlue,
+        secondary: neonBlue,
+        tertiary: electricBlueLight,
         surface: cardBackground,
         onPrimary: darkBackground,
         onSecondary: darkBackground,
@@ -28,9 +35,14 @@ class AppTheme {
 
       cardTheme: CardThemeData(
         color: cardBackground,
-        elevation: 4,
+        elevation: 8,
+        shadowColor: electricBlue.withValues(alpha: 0.3),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(
+            color: electricBlue.withValues(alpha: 0.2),
+            width: 1,
+          ),
         ),
       ),
 
@@ -45,30 +57,36 @@ class AppTheme {
         ),
       ),
 
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: electricYellow,
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: electricBlue,
         foregroundColor: darkBackground,
-        elevation: 8,
+        elevation: 12,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
       ),
 
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: electricYellow,
+          backgroundColor: electricBlue,
           foregroundColor: darkBackground,
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          elevation: 8,
+          shadowColor: electricBlue.withValues(alpha: 0.5),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
           ),
           textStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
+            letterSpacing: 0.5,
           ),
         ),
       ),
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: electricYellow,
+          foregroundColor: electricBlue,
           textStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -80,18 +98,25 @@ class AppTheme {
         filled: true,
         fillColor: cardBackground,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(
+            color: electricBlue.withValues(alpha: 0.3),
+            width: 1,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(
+            color: electricBlue.withValues(alpha: 0.3),
+            width: 1,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: electricYellow, width: 2),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: electricBlue, width: 2),
         ),
         hintStyle: const TextStyle(color: textSecondary),
+        labelStyle: const TextStyle(color: electricBlue),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 16,

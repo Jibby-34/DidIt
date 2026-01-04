@@ -3,6 +3,7 @@ import '../services/subscription_service.dart';
 import '../services/storage_service.dart';
 import '../constants/app_constants.dart';
 import '../theme/app_theme.dart';
+import '../widgets/decorative_background.dart';
 
 class PremiumScreen extends StatefulWidget {
   const PremiumScreen({super.key});
@@ -30,9 +31,19 @@ class _PremiumScreenState extends State<PremiumScreen> {
           if (mounted) {
             Navigator.pop(context, true);
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('⚡ Welcome to Premium!'),
-                backgroundColor: AppTheme.neonGreen,
+              SnackBar(
+                content: Row(
+                  children: [
+                    Icon(Icons.flash_on, color: AppTheme.electricBlue, size: 20),
+                    const SizedBox(width: 8),
+                    const Text('Welcome to Premium!'),
+                  ],
+                ),
+                backgroundColor: AppTheme.electricBlue,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
             );
           }
@@ -58,18 +69,68 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('⚡ Premium'),
-      ),
-      body: _isProcessing
-          ? const Center(
+    return DecorativeBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Custom Header
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
+                child: Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppTheme.electricBlue.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppTheme.electricBlue.withValues(alpha: 0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: AppTheme.electricBlue,
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Row(
+                      children: [
+                        Icon(Icons.flash_on, color: AppTheme.electricBlue, size: 24),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Premium',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // Content
+              Expanded(
+                child: _isProcessing
+          ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(color: AppTheme.electricYellow),
-                  SizedBox(height: 24),
-                  Text('Processing...'),
+                  const CircularProgressIndicator(color: AppTheme.electricBlue),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.flash_on, color: AppTheme.electricBlue, size: 20),
+                      const SizedBox(width: 8),
+                      const Text('Processing...'),
+                    ],
+                  ),
                 ],
               ),
             )
@@ -78,10 +139,22 @@ class _PremiumScreenState extends State<PremiumScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    '⚡',
-                    style: TextStyle(fontSize: 80),
-                    textAlign: TextAlign.center,
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: RadialGradient(
+                        colors: [
+                          AppTheme.electricBlue.withValues(alpha: 0.3),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.flash_on,
+                      color: AppTheme.electricBlue,
+                      size: 80,
+                    ),
                   ),
                   const SizedBox(height: 24),
                   Text(
@@ -128,13 +201,22 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
+                      gradient: LinearGradient(
                         colors: [
-                          AppTheme.electricYellow,
-                          AppTheme.neonGreen,
+                          AppTheme.electricBlue,
+                          AppTheme.electricBlueDark,
                         ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.electricBlue.withValues(alpha: 0.5),
+                          blurRadius: 20,
+                          spreadRadius: 2,
+                        ),
+                      ],
                     ),
                     child: Column(
                       children: [
@@ -150,6 +232,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                           'per month',
                           style: TextStyle(
                             fontSize: 18,
+                            fontWeight: FontWeight.w600,
                             color: AppTheme.darkBackground,
                           ),
                         ),
@@ -190,6 +273,11 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 ],
               ),
             ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -203,17 +291,31 @@ class _PremiumScreenState extends State<PremiumScreen> {
       children: [
         Container(
           padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppTheme.electricYellow.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(12),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                AppTheme.electricBlue.withValues(alpha: 0.2),
+                AppTheme.electricBlue.withValues(alpha: 0.1),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: AppTheme.electricYellow,
+              color: AppTheme.electricBlue,
               width: 2,
             ),
+            boxShadow: [
+              BoxShadow(
+                color: AppTheme.electricBlue.withValues(alpha: 0.3),
+                blurRadius: 8,
+                spreadRadius: 0,
+              ),
+            ],
           ),
           child: Icon(
             icon,
-            color: AppTheme.electricYellow,
+            color: AppTheme.electricBlue,
             size: 28,
           ),
         ),

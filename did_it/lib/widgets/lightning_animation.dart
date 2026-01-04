@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 class LightningAnimation extends StatefulWidget {
   final VoidCallback? onComplete;
@@ -94,20 +95,31 @@ class _LightningAnimationState extends State<LightningAnimation>
                 height: widget.size,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      AppTheme.electricBlue.withValues(alpha: 0.8),
+                      AppTheme.electricBlue.withValues(alpha: 0.4),
+                      Colors.transparent,
+                    ],
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.yellow.withValues(alpha: 0.8),
-                      blurRadius: 30,
-                      spreadRadius: 10,
+                      color: AppTheme.electricBlue.withValues(alpha: 0.8),
+                      blurRadius: 40,
+                      spreadRadius: 15,
+                    ),
+                    BoxShadow(
+                      color: AppTheme.electricBlue.withValues(alpha: 0.6),
+                      blurRadius: 20,
+                      spreadRadius: 5,
                     ),
                   ],
                 ),
                 child: Center(
-                  child: Text(
-                    '⚡',
-                    style: TextStyle(
-                      fontSize: widget.size * 0.7,
-                    ),
+                  child: Icon(
+                    Icons.flash_on,
+                    size: widget.size * 0.7,
+                    color: AppTheme.electricBlue,
                   ),
                 ),
               ),
@@ -169,12 +181,17 @@ class _LightningGlowState extends State<LightningGlow>
       builder: (context, child) {
         return Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.yellow.withValues(alpha: _pulseAnimation.value * 0.5),
-                blurRadius: 20 * _pulseAnimation.value,
-                spreadRadius: 5 * _pulseAnimation.value,
+                color: AppTheme.electricBlue.withValues(alpha: _pulseAnimation.value * 0.6),
+                blurRadius: 25 * _pulseAnimation.value,
+                spreadRadius: 8 * _pulseAnimation.value,
+              ),
+              BoxShadow(
+                color: AppTheme.electricBlue.withValues(alpha: _pulseAnimation.value * 0.3),
+                blurRadius: 40 * _pulseAnimation.value,
+                spreadRadius: 15 * _pulseAnimation.value,
               ),
             ],
           ),

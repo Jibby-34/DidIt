@@ -3,6 +3,7 @@ import '../services/storage_service.dart';
 import '../services/notification_service.dart';
 import '../services/subscription_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/decorative_background.dart';
 import 'premium_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -59,7 +60,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       barrierDismissible: false,
       builder: (context) => const Center(
-        child: CircularProgressIndicator(color: AppTheme.electricYellow),
+        child: CircularProgressIndicator(color: AppTheme.electricBlue),
       ),
     );
 
@@ -74,24 +75,80 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            _isPremium
-                ? '⚡ Premium restored!'
-                : 'No purchases found',
+          content: Row(
+            children: [
+              Icon(
+                _isPremium ? Icons.flash_on : Icons.info_outline,
+                color: AppTheme.electricBlue,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                _isPremium
+                    ? 'Premium restored!'
+                    : 'No purchases found',
+              ),
+            ],
           ),
-          backgroundColor:
-              _isPremium ? AppTheme.neonGreen : null,
+          backgroundColor: _isPremium ? AppTheme.electricBlue : AppTheme.cardBackgroundElevated,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
       );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
-      body: ListView(
+    return DecorativeBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Custom Header
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
+                child: Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppTheme.electricBlue.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppTheme.electricBlue.withValues(alpha: 0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: AppTheme.electricBlue,
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Row(
+                      children: [
+                        Icon(Icons.settings, color: AppTheme.electricBlue, size: 24),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Settings',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // Content
+              Expanded(
+                child: ListView(
         children: [
           // Premium Section
           if (!_isPremium) ...[
@@ -110,33 +167,50 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     await _loadSettings();
                   }
                 },
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(20),
                 child: Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       colors: [
-                        AppTheme.electricYellow,
-                        AppTheme.neonGreen,
+                        AppTheme.electricBlue,
+                        AppTheme.electricBlueDark,
                       ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: const Column(
-                    children: [
-                      Text(
-                        '⚡ Upgrade to Premium',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.darkBackground,
-                        ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppTheme.electricBlue.withValues(alpha: 0.5),
+                        blurRadius: 20,
+                        spreadRadius: 2,
                       ),
-                      SizedBox(height: 8),
-                      Text(
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.flash_on, color: AppTheme.darkBackground, size: 28),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Upgrade to Premium',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.darkBackground,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
                         'Unlimited streaks • No ads • Instant AI',
                         style: TextStyle(
                           fontSize: 14,
+                          fontWeight: FontWeight.w600,
                           color: AppTheme.darkBackground,
                         ),
                       ),
@@ -155,7 +229,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     children: [
                       const Icon(
                         Icons.verified,
-                        color: AppTheme.neonGreen,
+                        color: AppTheme.electricBlue,
                         size: 32,
                       ),
                       const SizedBox(width: 16),
@@ -163,9 +237,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              '⚡ Premium Active',
-                              style: Theme.of(context).textTheme.titleLarge,
+                            Row(
+                              children: [
+                                Icon(Icons.flash_on, color: AppTheme.electricBlue, size: 20),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Premium Active',
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                              ],
                             ),
                             Text(
                               'Thank you for your support!',
@@ -195,11 +275,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           Card(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child:             SwitchListTile(
+            child: SwitchListTile(
               title: const Text('Daily Reminders'),
               subtitle: const Text('Get reminded to complete your streaks'),
               value: _notificationsEnabled,
-              activeTrackColor: AppTheme.electricYellow,
+              activeColor: AppTheme.electricBlue,
+              activeTrackColor: AppTheme.electricBlue.withValues(alpha: 0.5),
               onChanged: _toggleNotifications,
             ),
           ),
@@ -248,8 +329,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   trailing: const Text('1.0.0'),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.bolt),
-                  title: const Text('Made with ⚡'),
+                  leading: Icon(Icons.flash_on, color: AppTheme.electricBlue),
+                  title: Row(
+                    children: [
+                      const Text('Made with '),
+                      Icon(Icons.flash_on, color: AppTheme.electricBlue, size: 18),
+                    ],
+                  ),
                   subtitle: const Text('Built with Flutter'),
                 ),
               ],
@@ -258,6 +344,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           const SizedBox(height: 32),
         ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
